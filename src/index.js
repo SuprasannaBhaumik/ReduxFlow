@@ -13,7 +13,10 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import configureStore from './store/configureStore';
 import { Provider } from 'react-redux';
 
+import { loadCourses } from './actions/courseAction';
+
 const store = configureStore();//no initial state passed. as reducers are already doing that
+store.dispatch(loadCourses());
 
 render(
 	<Provider store={store}>
