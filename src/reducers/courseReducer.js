@@ -4,9 +4,9 @@
 //This is the new ES6 syntax for that : state = [] .
 //Used spread operator so that old state is copied into the new state.
 import React from 'react';
+import InitialState from './initialState';
 
-
-export default function courseReducer(state = [], action){
+export default function courseReducer(state = InitialState.courses, action){
 	switch(action.type){
 		case 'CREATE_COURSE':
 			//state =  [...state, course: action.course];

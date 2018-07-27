@@ -14,9 +14,11 @@ import configureStore from './store/configureStore';
 import { Provider } from 'react-redux';
 
 import { loadCourses } from './actions/courseAction';
+import { loadAuthors } from './actions/authorActions';
 
 const store = configureStore();//no initial state passed. as reducers are already doing that
 store.dispatch(loadCourses());
+store.dispatch(loadAuthors());
 
 render(
 	<Provider store={store}>
