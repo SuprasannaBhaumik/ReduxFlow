@@ -3,12 +3,12 @@ import * as actionCreator  from '../../actions/courseAction';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import CourseList from './courseList';
-
+import { browserHistory } from 'react-router';
 class CoursesPage extends Component {
 
 	constructor(props, context){
 		super(props, context);
-		
+		this.redirectToAddCoursePage = this.redirectToAddCoursePage.bind(this);
 	}
 
 	/*onClickSave_WithoutMapDispatchWithProps(){
@@ -31,11 +31,21 @@ class CoursesPage extends Component {
 		);
 	}*/
 
+	redirectToAddCoursePage(){
+		browserHistory.push('/course');
+	}
+
 	render(){
 		//const {courses} = this.props;
 		return(
 			<div>
 				<h1>Courses</h1>
+				<input 
+					type="submit"
+					value="Add Course"
+					className="btn btn-primary"
+					onClick={this.redirectToAddCoursePage} />
+
 				<CourseList courses={this.props.courses} />
 			</div>
 		);

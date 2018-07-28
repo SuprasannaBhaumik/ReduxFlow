@@ -12,6 +12,7 @@ class ManageCoursePage extends Component {
 			errors : {}
 		};
 		this.updateCourseState = this.updateCourseState.bind(this);
+		this.saveCourseState = this.saveCourseState.bind(this);
 	}
 
 	updateCourseState(event){
@@ -21,12 +22,27 @@ class ManageCoursePage extends Component {
 		return this.setState({course});
 	}
 
+	saveCourseState(event){
+		event.preventDefault();
+		this.props.actions.saveCourse(this.state.course);
+		this.context.router.push('/courses');
+	}
+
+	//react runs it everytime it thinks the props have changed
+	//but it also runs as a safety procedure because react may not know when the props have changed
+	componentWillReceiveProps(nextProps){
+		if(this.props.course.id != nextProps.course.id){
+			this.setState({course: Object.assign({}, nextProps.course)});
+		}
+	}
+
 	render() {
 
 		return(
 			<div>
 				<h1>Manage Course</h1>
 				<CourseForm 
+					onSave = {this.saveCourseState}
 					onChange = {this.updateCourseState}
 					allAuthors = {this.props.authors}
 					course={this.state.course}
@@ -38,8 +54,13 @@ class ManageCoursePage extends Component {
 
 ManageCoursePage.propTypes = {
 	course: PropTypes.object.isRequired,
-	authors : PropTypes.array.isRequired
+	authors : PropTypes.array.isRequired,
+	actions : PropTypes.object.isRequired
 };
+
+ManageCoursePage.contextTypes = {
+	router : PropTypes.object
+}
 
 function mapStateToProps(state, ownProps){
 
@@ -51,6 +72,12 @@ function mapStateToProps(state, ownProps){
 		length:'',
 		category:''
 	};
+
+	const courseId = ownProps.params.id;
+
+	if(courseId && state.courses.length>0){
+		course = getCourseById(state.courses, courseId);
+	}
 
 	const authorDataFormatted = state.authors.map(author=>{
 		return {
@@ -69,6 +96,14 @@ function mapDispatchToProps(dispatch) {
 	return {
 		actions : bindActionCreators(courseActions, dispatch)
 	};
+}
+
+function getCourseById(courses, id) {
+	const arrayWithMyCourse = courses.filter( course => course.id == id);
+	if(arrayWithMyCourse.length>0){
+		return arrayWithMyCourse[0];
+	}
+	return null;
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ManageCoursePage);
